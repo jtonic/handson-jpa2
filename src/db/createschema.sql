@@ -1,0 +1,8 @@
+CREATE TABLE ENTITY_A (
+  ID  NUMBER(19,0) NOT NULL PRIMARY KEY,
+  NAME VARCHAR2(200) NOT NULL
+);
+
+CREATE SEQUENCE SEQ_ENTITY_A START WITH 1 INCREMENT BY 1;
+
+create or replace trigger TRG_ENTITY_A before insert on ENTITY_A for each row when (NEW.ID is null) begin 	:NEW.ID := SEQ_ENTITY_A.NEXTVAL; end;
