@@ -1,6 +1,7 @@
 package ro.jtonic.handson.jpa2.entities;
 
 import javax.persistence.*;
+import java.sql.Blob;
 
 /**
  * Created by pazaran on 08/08/2014.
@@ -15,6 +16,10 @@ public class EntityA {
     private Long id;
 
     private String name;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private Blob content;
 
     public EntityA(String name) {
         this.name = name;
@@ -35,4 +40,11 @@ public class EntityA {
         return id;
     }
 
+    public Blob getContent() {
+        return content;
+    }
+
+    public void setContent(Blob content) {
+        this.content = content;
+    }
 }
