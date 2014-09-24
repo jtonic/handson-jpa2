@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG" name="dorsale" monitorInterval="5">
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d [%p] %c %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.hibernate.sql" level="DEBUG" additivity="false">
+            <AppenderRef ref="STDOUT" level="DEBUG"/>
+        </Logger>
+
+        <Logger name="org.hibernate.transaction" level="DEBUG" additivity="false">
+            <AppenderRef ref="STDOUT" level="DEBUG"/>
+        </Logger>
+
+        <Logger name="org.hibernate" level="INFO" additivity="false">
+            <AppenderRef ref="STDOUT" level="DEBUG"/>
+        </Logger>
+
+        <Logger name="hibernate.type" level="ALL" additivity="false">
+            <AppenderRef ref="STDOUT" level="DEBUG"/>
+        </Logger>
+
+        <Logger name="org.hibernate.cache" level="ALL" additivity="false">
+            <AppenderRef ref="STDOUT" level="DEBUG"/>
+        </Logger>
+
+        <Logger name="org.hibernate.ejb" level="ALL" additivity="false">
+            <AppenderRef ref="STDOUT" level="DEBUG"/>
+        </Logger>
+
+        <Root level="WARN">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+    </Loggers>
+</Configuration>
