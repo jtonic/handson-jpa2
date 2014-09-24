@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 /**
  * Created by pazaran on 08/08/2014.
@@ -23,7 +24,7 @@ public class JpaPersister {
     private EntityManager em;
 
     @Transactional
-    public void saveEntityA(EntityA entityA) {
+    public Long saveEntityA(EntityA entityA) {
         final Session hibernateSession = em.unwrap(Session.class);
         final LobHelper lobHelper = hibernateSession.getLobHelper();
         try {
@@ -35,9 +36,17 @@ public class JpaPersister {
             throw new RuntimeException(e);
         }
         em.persist(entityA);
+        return entityA.getId();
     }
 
     public EntityManager getEm() {
         return em;
+    }
+
+    public EntityA getById(Long id) throws SQLException {
+        final EntityA saved = em.find(EntityA.class, id);
+        final long length = saved.getContent().length();
+        System.out.println("length = " + length);
+        return saved;
     }
 }

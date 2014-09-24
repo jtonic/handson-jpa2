@@ -1,5 +1,8 @@
 package ro.jtonic.handson.jpa2.entities;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
 import javax.persistence.*;
 import java.sql.Blob;
 
@@ -47,4 +50,13 @@ public class EntityA {
     public void setContent(Blob content) {
         this.content = content;
     }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("name", name)
+                .toString();
+    }
+
 }

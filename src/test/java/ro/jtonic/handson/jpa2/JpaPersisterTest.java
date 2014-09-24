@@ -19,6 +19,8 @@ public class JpaPersisterTest extends AbstractTestNGSpringContextTests {
     @Transactional
     public void testSaveEntityA() throws Exception {
         EntityA entityA = new EntityA("Antonel Pazargic");
-        jpaPersister.saveEntityA(entityA);
+        final Long id = jpaPersister.saveEntityA(entityA);
+        EntityA savedEntityA = jpaPersister.getById(id);
+        System.out.println("savedEntityA = " + savedEntityA);
     }
 }
