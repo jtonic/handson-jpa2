@@ -6,21 +6,39 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
-import ro.jtonic.handson.jpa2.entities.EntityA;
+import ro.jtonic.handson.jpa2.entities.FileContent;
+import ro.jtonic.handson.jpa2.entities.Part;
 
 @ContextConfiguration(classes = {ApplicationConfig.class})
 @TransactionConfiguration(defaultRollback = false)
 public class JpaPersisterTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    private JpaPersister jpaPersister;
+    private JpaPersister persister;
 
     @Test
     @Transactional
-    public void testSaveEntityA() throws Exception {
-        EntityA entityA = new EntityA("Antonel Pazargic");
-        final Long id = jpaPersister.saveEntityA(entityA);
-        EntityA savedEntityA = jpaPersister.getById(id);
-        System.out.println("savedEntityA = " + savedEntityA);
+    public void testSaveFileContent() throws Exception {
+        FileContent fileContent = new FileContent("Antonel Pazargic");
+        final Long id = persister.saveFileContent(fileContent);
+        FileContent savedFileContent = persister.getById(id);
+        System.out.println("savedFileContent = " + savedFileContent);
+    }
+
+    @Test
+    @Transactional
+    public void testSaveAndRetrievePart() throws Exception {
+        persister.savePart(new Part("Part 2"));
+    }
+
+    @Test
+    @Transactional
+    public void testSaveAndRetrievePartWithContent() throws Exception {
+        final Part p = new Part("Part 2");
+        final FileContent fc = new FileContent("Filecontent 1");
+        //fixme continue from here with blob and input stream support in JPA2 and Hibernate
+        // fc.setContent();
+        p.setFileContent(fc);
+        persister.savePart(p);
     }
 }

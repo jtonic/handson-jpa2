@@ -5,7 +5,7 @@ Issues, corner-cases and pitfalls discovered while working with JPA2 Hibernate i
     Solutions:
 
 
-2. A solution to pass from client an InputStream and getting back an InputStream (sounds strange, I know) and Hibernate/DB use Blob.
+2. A solution to pass from client an getting back an InputStream, and , behind the scene Hibernate/DB use Blob
 
     Solutions
 
