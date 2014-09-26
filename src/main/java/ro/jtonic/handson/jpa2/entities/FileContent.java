@@ -1,6 +1,7 @@
 package ro.jtonic.handson.jpa2.entities;
 
 import com.google.common.base.MoreObjects;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.sql.Blob;
@@ -21,7 +22,6 @@ public class FileContent {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
-//    @Transient
     private Blob content;
 
     public FileContent(String name) {
