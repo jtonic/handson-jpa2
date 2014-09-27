@@ -10,7 +10,7 @@
 
     <properties>
         <oracle.driver.version>12.1.2-0-0</oracle.driver.version>
-        <hibernate-version>4.2.8.Final</hibernate-version>
+        <hibernate-version>4.2.15.Final</hibernate-version>
     </properties>
 
     <dependencies>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
-            <version>4.3.6.Final</version>
+            <version>${hibernate-version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>
