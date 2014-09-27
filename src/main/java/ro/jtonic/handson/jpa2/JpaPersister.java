@@ -1,6 +1,5 @@
 package ro.jtonic.handson.jpa2;
 
-import com.google.common.io.ByteStreams;
 import org.hibernate.engine.jdbc.NonContextualLobCreator;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +10,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -31,7 +33,7 @@ public class JpaPersister {
     public void saveFileContent(FileContent fileContent) {
         long size = 1024L;
         try {
-            size = ByteStreams.toByteArray(new FileInputStream("E:\\tmp\\handson-jpa2\\src\\test\\resources\\image.png")).length;
+            size = Files.size(Paths.get(URI.create("E:\\tmp\\handson-jpa2\\src\\test\\resources\\image.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
