@@ -1,6 +1,6 @@
 package ro.jtonic.handson.jpa2;
 
-import com.google.common.io.ByteStreams;
+import org.hibernate.engine.jdbc.NonContextualLobCreator;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ro.jtonic.handson.jpa2.entities.FileContent;
@@ -8,9 +8,7 @@ import ro.jtonic.handson.jpa2.entities.Part;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -30,21 +28,18 @@ public class JpaPersister {
 
     @Transactional
     public Long saveFileContent(FileContent fileContent) {
-        try {
-            try(InputStream is = new FileInputStream("E:\\tmp\\handson-jpa2\\src\\test\\resources\\image.png")) {
-                try {
-                    fileContent.setContent(new SerialBlob(ByteStreams.toByteArray(is)));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-            }
-        } catch (IOException e) {
+        Long id = null;
+        try (InputStream is = new FileInputStream("E:\\tmp\\handson-jpa2\\src\\test\\resources\\image.png")) {
+//            final Blob blob = NonContextualLobCreator.INSTANCE.createBlob(is, ByteStreams.toByteArray(is).length);
+            final Blob blob = NonContextualLobCreator.INSTANCE.createBlob(is, 1024);
+            fileContent.setContent(blob);
+//                    fileContent.setContent(new SerialBlob(ByteStreams.toByteArray(is)));
+            em.persist(fileContent);
+            id = fileContent.getId();
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
         }
-        em.persist(fileContent);
-        return fileContent.getId();
+        return id;
     }
 
     @Transactional(readOnly = true)
