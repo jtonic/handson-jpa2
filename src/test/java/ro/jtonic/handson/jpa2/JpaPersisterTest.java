@@ -17,14 +17,9 @@ public class JpaPersisterTest extends AbstractTestNGSpringContextTests {
     private JpaPersister persister;
 
     @Test
-    @Transactional
     public void testSaveFileContent() throws Exception {
         FileContent fileContent = new FileContent("Antonel Pazargic");
-        final Long id = persister.saveFileContent(fileContent);
-/*
-        FileContent savedFileContent = persister.getById(id);
-        System.out.println("savedFileContent = " + savedFileContent);
-*/
+        persister.saveFileContent(fileContent);
     }
 
     @Test

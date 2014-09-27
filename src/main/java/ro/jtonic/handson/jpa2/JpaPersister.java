@@ -1,5 +1,6 @@
 package ro.jtonic.handson.jpa2;
 
+import com.google.common.io.ByteStreams;
 import org.hibernate.engine.jdbc.NonContextualLobCreator;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +10,7 @@ import ro.jtonic.handson.jpa2.entities.Part;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -27,19 +28,24 @@ public class JpaPersister {
     }
 
     @Transactional
-    public Long saveFileContent(FileContent fileContent) {
-        Long id = null;
-        try (InputStream is = new FileInputStream("E:\\tmp\\handson-jpa2\\src\\test\\resources\\image.png")) {
-//            final Blob blob = NonContextualLobCreator.INSTANCE.createBlob(is, ByteStreams.toByteArray(is).length);
-            final Blob blob = NonContextualLobCreator.INSTANCE.createBlob(is, 1024);
+    public void saveFileContent(FileContent fileContent) {
+        long size = 1024L;
+        try {
+            size = ByteStreams.toByteArray(new FileInputStream("E:\\tmp\\handson-jpa2\\src\\test\\resources\\image.png")).length;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            final FileInputStream is = new FileInputStream("E:\\tmp\\handson-jpa2\\src\\test\\resources\\image.png");
+//            final Session session = getEm().unwrap(Session.class);
+//            final Blob blob = session.getLobHelper().createBlob(new FileInputStream("E:\\tmp\\handson-jpa2\\src\\test\\resources\\image.png"), size);
+            final Blob blob = NonContextualLobCreator.INSTANCE.createBlob(is, size);
             fileContent.setContent(blob);
-//                    fileContent.setContent(new SerialBlob(ByteStreams.toByteArray(is)));
             em.persist(fileContent);
-            id = fileContent.getId();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return id;
     }
 
     @Transactional(readOnly = true)
