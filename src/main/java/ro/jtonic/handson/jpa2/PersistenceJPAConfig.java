@@ -1,7 +1,9 @@
 package ro.jtonic.handson.jpa2;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -16,15 +18,26 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
+@PropertySource("classpath:persistence.properties")
 public class PersistenceJPAConfig {
+
+    @Value("${jdbc.driver}")
+    private String jdbcDriver;
+
+    @Value("${jdbc.url}")
+    private String jdbcUrl;
+
+    private final String jdbcUsername = System.getenv("MW_USERNAME");
+
+    private final String jdbcPassword = System.getenv("MW_PASSWORD");
 
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
-        dataSource.setUrl("jdbc:oracle:thin:@//localhost:1521/xe");
-        dataSource.setUsername("jtonic");
-        dataSource.setPassword("antonel1");
+        dataSource.setDriverClassName(jdbcDriver);
+        dataSource.setUrl(jdbcUrl);
+        dataSource.setUsername(jdbcUsername);
+        dataSource.setPassword(jdbcPassword);
         return dataSource;
     }
 

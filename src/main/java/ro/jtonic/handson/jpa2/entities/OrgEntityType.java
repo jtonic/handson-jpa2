@@ -1,5 +1,8 @@
 package ro.jtonic.handson.jpa2.entities;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -43,5 +46,14 @@ public class OrgEntityType implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("code", code)
+                .add("name", name)
+                .toString();
     }
 }

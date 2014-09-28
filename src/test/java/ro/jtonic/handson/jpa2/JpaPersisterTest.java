@@ -5,6 +5,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import ro.jtonic.handson.jpa2.entities.FileContent;
 import ro.jtonic.handson.jpa2.entities.OrgEntity;
@@ -42,7 +43,17 @@ public class JpaPersisterTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testGetOrgEntityById() {
-        OrgEntity orgEntity = persister.getOrgEntityById(1L);
-        System.out.println("orgEntity = " + orgEntity);
+//        query an org entity w/ a corresponding org entity type
+        OrgEntity orgEntity1 = persister.getOrgEntityById(1L);
+        System.out.println("===============================================================");
+        System.out.println("orgEntity1 = " + orgEntity1);
+        System.out.println("===============================================================");
+        Assert.assertNotNull(orgEntity1);
+//        query an org entity w/o a corresponding org entity type
+        OrgEntity orgEntity4 = persister.getOrgEntityById(4L);
+        System.out.println("===============================================================");
+        System.out.println("orgEntity4 = " + orgEntity4);
+        System.out.println("===============================================================");
+        Assert.assertNotNull(orgEntity4);
     }
 }

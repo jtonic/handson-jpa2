@@ -21,7 +21,7 @@ public class OrgEntity implements Serializable {
     private String code;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "TOR_ID")
+    @JoinColumn(name = "TOR_ID", nullable = true)
     private OrgEntityType orgEntityType;
 
     public OrgEntity() {
@@ -50,8 +50,9 @@ public class OrgEntity implements Serializable {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("orgEntityType", orgEntityType)
+                .add("id", id)
                 .add("code", code)
+                .add("orgEntityType", orgEntityType)
                 .toString();
     }
 }
