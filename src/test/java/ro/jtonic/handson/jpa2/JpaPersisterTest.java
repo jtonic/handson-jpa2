@@ -7,6 +7,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.annotations.Test;
 import ro.jtonic.handson.jpa2.entities.FileContent;
+import ro.jtonic.handson.jpa2.entities.OrgEntity;
 import ro.jtonic.handson.jpa2.entities.Part;
 
 @ContextConfiguration(classes = {ApplicationConfig.class})
@@ -37,5 +38,11 @@ public class JpaPersisterTest extends AbstractTestNGSpringContextTests {
         // fc.setContent();
         p.setFileContent(fc);
         persister.savePart(p);
+    }
+
+    @Test
+    public void testGetOrgEntityById() {
+        OrgEntity orgEntity = persister.getOrgEntityById(1L);
+        System.out.println("orgEntity = " + orgEntity);
     }
 }

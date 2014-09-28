@@ -22,9 +22,9 @@ public class PersistenceJPAConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
-        dataSource.setUrl("jdbc:oracle:thin:@devora3.cc.cec.eu.int:1579:IN1USGD");
-        dataSource.setUsername("PAZARAN");
-        dataSource.setPassword("rubita1!");
+        dataSource.setUrl("jdbc:oracle:thin:@//localhost:1521/xe");
+        dataSource.setUsername("jtonic");
+        dataSource.setPassword("antonel1");
         return dataSource;
     }
 

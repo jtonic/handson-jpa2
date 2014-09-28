@@ -4,6 +4,7 @@ import org.hibernate.engine.jdbc.NonContextualLobCreator;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ro.jtonic.handson.jpa2.entities.FileContent;
+import ro.jtonic.handson.jpa2.entities.OrgEntity;
 import ro.jtonic.handson.jpa2.entities.Part;
 
 import javax.persistence.EntityManager;
@@ -70,4 +71,11 @@ public class JpaPersister {
         final Part part = getEm().find(Part.class, id);
         return part;
     }
+
+    @Transactional(readOnly = true)
+    public OrgEntity getOrgEntityById(Long orgEntId) {
+        OrgEntity orgEntity = getEm().find(OrgEntity.class, orgEntId);
+        return orgEntity;
+    }
+
 }
