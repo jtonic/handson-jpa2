@@ -20,7 +20,7 @@ public class OrgEntity implements Serializable {
     @Column(name = "ORG_CD")
     private String code;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TOR_ID", nullable = true)
     private OrgEntityType orgEntityType;
 

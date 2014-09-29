@@ -4,9 +4,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ro.jtonic.handson.jpa2.entities.FileContent;
 import ro.jtonic.handson.jpa2.entities.OrgEntity;
+import ro.jtonic.handson.jpa2.entities.OrgEntityType;
 import ro.jtonic.handson.jpa2.entities.Part;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -54,6 +56,18 @@ public class JpaPersister {
     @Transactional(readOnly = true)
     public OrgEntity getOrgEntityById(Long orgEntId) {
         OrgEntity orgEntity = getEm().find(OrgEntity.class, orgEntId);
+        OrgEntityType orgEntityType;
+        try {
+            orgEntityType = orgEntity.getOrgEntityType();
+            if (orgEntityType != null) {
+                orgEntityType.getId();
+            }
+        } catch (EntityNotFoundException e) {
+            System.out.println("OrgEntityType NotFound for orgEntityId " + orgEntId);
+            orgEntityType = null;
+            orgEntity.setOrgEntityType(orgEntityType);
+        }
+        System.out.println("orgEntityType = " + orgEntityType);
         return orgEntity;
     }
 
