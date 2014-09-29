@@ -1,10 +1,14 @@
 package ro.jtonic.handson.jpa2.entities;
 
 import com.google.common.base.MoreObjects;
-import org.hibernate.annotations.Type;
+import org.hibernate.engine.jdbc.NonContextualLobCreator;
 
 import javax.persistence.*;
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.Blob;
+import java.sql.SQLException;
 
 /**
  * Created by pazaran on 08/08/2014.
@@ -43,12 +47,26 @@ public class FileContent {
         return id;
     }
 
-    public Blob getContent() {
+    Blob getContent() {
         return content;
     }
 
-    public void setContent(Blob content) {
+    void setContent(Blob content) {
         this.content = content;
+    }
+
+    @Transient
+    public InputStream getContentFromInputStream() throws SQLException {
+        if(this.content == null)
+            return new ByteArrayInputStream(new byte[0]);
+        return this.content.getBinaryStream();
+    }
+
+    @Transient
+    public void setContentFromInputStream(InputStream is, long size) {
+        if(is != null) {
+            this.content = NonContextualLobCreator.INSTANCE.createBlob(is, size);
+        }
     }
 
     @Override

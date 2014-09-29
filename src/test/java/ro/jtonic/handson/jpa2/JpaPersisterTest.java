@@ -1,19 +1,20 @@
 package ro.jtonic.handson.jpa2;
 
-import org.hibernate.engine.jdbc.NonContextualLobCreator;
+import com.google.common.io.ByteStreams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import ro.jtonic.handson.jpa2.entities.FileContent;
 import ro.jtonic.handson.jpa2.entities.Part;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Blob;
 
 @ContextConfiguration(classes = {ApplicationConfig.class})
 @TransactionConfiguration(defaultRollback = false)
@@ -29,13 +30,19 @@ public class JpaPersisterTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void testSaveFileContent1() throws Exception {
+    public void testSaveAndGetFileContent() throws Exception {
         long size = Files.size(Paths.get("E:/tmp/handson-jpa2/src/test/resources/image.png"));
         FileContent fileContent = new FileContent("Antonel Pazargic");
         final FileInputStream is = new FileInputStream("E:/tmp/handson-jpa2/src/test/resources/image.png");
-        final Blob blob = NonContextualLobCreator.INSTANCE.createBlob(is, size);
-        fileContent.setContent(blob);
-        persister.saveFileContent1(fileContent);
+        fileContent.setContentFromInputStream(is, size);
+        final long fileContentId = persister.saveFileContent1(fileContent);
+        final FileContent savedFileContent = persister.getById(fileContentId);
+        System.out.println("savedFileContent = " + savedFileContent);
+        final InputStream content = savedFileContent.getContentFromInputStream();
+        final long retrievedBytesLength = ByteStreams.toByteArray(content).length;
+        Assert.assertNotNull(savedFileContent);
+        Assert.assertEquals(retrievedBytesLength, size);
+        System.out.println("content = " + content);
     }
 
     @Test

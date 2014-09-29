@@ -1,6 +1,5 @@
 package ro.jtonic.handson.jpa2;
 
-import org.hibernate.engine.jdbc.NonContextualLobCreator;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ro.jtonic.handson.jpa2.entities.FileContent;
@@ -13,7 +12,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Blob;
 import java.sql.SQLException;
 
 /**
@@ -30,40 +28,25 @@ public class JpaPersister {
     }
 
     @Transactional
-    public void saveFileContent(FileContent fileContent) {
-        long size = 1024L;
-        try {
-            size = Files.size(Paths.get("E:/tmp/handson-jpa2/src/test/resources/image.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            final FileInputStream is = new FileInputStream("E:/tmp/handson-jpa2/src/test/resources/image.png");
-//            final Session session = getEm().unwrap(Session.class);
-//            final Blob blob = session.getLobHelper().createBlob(new FileInputStream("E:/tmp/handson-jpa2/src/test/resources/image.png"), size);
-            final Blob blob = NonContextualLobCreator.INSTANCE.createBlob(is, size);
-            fileContent.setContent(blob);
-            em.persist(fileContent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void saveFileContent(FileContent fileContent) throws IOException {
+        long size = Files.size(Paths.get("E:/tmp/handson-jpa2/src/test/resources/image.png"));
+        final FileInputStream is = new FileInputStream("E:/tmp/handson-jpa2/src/test/resources/image.png");
+        fileContent.setContentFromInputStream(is, size);
+        em.persist(fileContent);
     }
 
     @Transactional
-    public void saveFileContent1(FileContent fileContent) {
+    public long saveFileContent1(FileContent fileContent) {
         if (fileContent == null) {
             throw new IllegalArgumentException("FileContent cannot be null");
         }
         em.persist(fileContent);
+        return fileContent.getId();
     }
 
     @Transactional(readOnly = true)
-    public FileContent getById(Long id) throws SQLException {
+    public FileContent getById(Long id) throws SQLException, IOException {
         final FileContent saved = em.find(FileContent.class, id);
-        final Blob content = saved.getContent();
-        final int contentSize = (int) content.length();
-        final byte[] is = content.getBytes(1, contentSize);
         return saved;
     }
 
