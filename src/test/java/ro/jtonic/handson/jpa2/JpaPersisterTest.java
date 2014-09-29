@@ -5,10 +5,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import ro.jtonic.handson.jpa2.entities.FileContent;
-import ro.jtonic.handson.jpa2.entities.OrgEntity;
 import ro.jtonic.handson.jpa2.entities.Part;
 
 @ContextConfiguration(classes = {ApplicationConfig.class})
@@ -41,33 +39,4 @@ public class JpaPersisterTest extends AbstractTestNGSpringContextTests {
         persister.savePart(p);
     }
 
-    @Test
-    /*This tests a relation between entities w/o a DB FK but with correct value for "FK" and PK*/
-    public void testGetOrgEntityByIdWithCorrectOrgEntTypeRelation() {
-        OrgEntity orgEntity = persister.getOrgEntityById(1L);
-        System.out.println("===============================================================");
-        System.out.println("orgEntity = " + orgEntity);
-        System.out.println("===============================================================");
-        Assert.assertNotNull(orgEntity);
-    }
-
-    @Test
-    /*This tests a relation between entities w/o a DB FK but with null "FK"*/
-    public void testGetOrgEntityByIdWithNullForOrgEntTypeFkValue() {
-        OrgEntity orgEntity = persister.getOrgEntityById(4L);
-        System.out.println("===============================================================");
-        System.out.println("orgEntity = " + orgEntity);
-        System.out.println("===============================================================");
-        Assert.assertNotNull(orgEntity);
-    }
-
-    @Test
-    /*This tests a relation between entities w/o a DB FK but with incorrect value for "FK". There is no entry in ORG_ENT_TYPE table for the value of the "FK"*/
-    public void testGetOrgEntityByIdWithIncorrectOrgEntTypeRelation() {
-        OrgEntity orgEntity = persister.getOrgEntityById(6L);
-        System.out.println("===============================================================");
-        System.out.println("orgEntity = " + orgEntity);
-        System.out.println("===============================================================");
-        Assert.assertNotNull(orgEntity);
-    }
 }

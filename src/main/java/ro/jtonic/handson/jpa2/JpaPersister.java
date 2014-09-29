@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Blob;
@@ -34,15 +33,15 @@ public class JpaPersister {
     public void saveFileContent(FileContent fileContent) {
         long size = 1024L;
         try {
-            size = Files.size(Paths.get(URI.create("E:\\tmp\\handson-jpa2\\src\\test\\resources\\image.png")));
+            size = Files.size(Paths.get("E:/tmp/handson-jpa2/src/test/resources/image.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            final FileInputStream is = new FileInputStream("E:\\tmp\\handson-jpa2\\src\\test\\resources\\image.png");
+            final FileInputStream is = new FileInputStream("E:/tmp/handson-jpa2/src/test/resources/image.png");
 //            final Session session = getEm().unwrap(Session.class);
-//            final Blob blob = session.getLobHelper().createBlob(new FileInputStream("E:\\tmp\\handson-jpa2\\src\\test\\resources\\image.png"), size);
+//            final Blob blob = session.getLobHelper().createBlob(new FileInputStream("E:/tmp/handson-jpa2/src/test/resources/image.png"), size);
             final Blob blob = NonContextualLobCreator.INSTANCE.createBlob(is, size);
             fileContent.setContent(blob);
             em.persist(fileContent);
