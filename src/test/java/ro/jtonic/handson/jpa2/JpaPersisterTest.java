@@ -42,18 +42,32 @@ public class JpaPersisterTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void testGetOrgEntityById() {
-//        query an org entity w/ a corresponding org entity type
-        OrgEntity orgEntity1 = persister.getOrgEntityById(1L);
+    /*This tests a relation between entities w/o a DB FK but with correct value for "FK" and PK*/
+    public void testGetOrgEntityByIdWithCorrectOrgEntTypeRelation() {
+        OrgEntity orgEntity = persister.getOrgEntityById(1L);
         System.out.println("===============================================================");
-        System.out.println("orgEntity1 = " + orgEntity1);
+        System.out.println("orgEntity = " + orgEntity);
         System.out.println("===============================================================");
-        Assert.assertNotNull(orgEntity1);
-//        query an org entity w/o a corresponding org entity type
-        OrgEntity orgEntity4 = persister.getOrgEntityById(4L);
+        Assert.assertNotNull(orgEntity);
+    }
+
+    @Test
+    /*This tests a relation between entities w/o a DB FK but with null "FK"*/
+    public void testGetOrgEntityByIdWithNullForOrgEntTypeFkValue() {
+        OrgEntity orgEntity = persister.getOrgEntityById(4L);
         System.out.println("===============================================================");
-        System.out.println("orgEntity4 = " + orgEntity4);
+        System.out.println("orgEntity = " + orgEntity);
         System.out.println("===============================================================");
-        Assert.assertNotNull(orgEntity4);
+        Assert.assertNotNull(orgEntity);
+    }
+
+    @Test
+    /*This tests a relation between entities w/o a DB FK but with incorrect value for "FK". There is no entry in ORG_ENT_TYPE table for the value of the "FK"*/
+    public void testGetOrgEntityByIdWithIncorrectOrgEntTypeRelation() {
+        OrgEntity orgEntity = persister.getOrgEntityById(6L);
+        System.out.println("===============================================================");
+        System.out.println("orgEntity = " + orgEntity);
+        System.out.println("===============================================================");
+        Assert.assertNotNull(orgEntity);
     }
 }

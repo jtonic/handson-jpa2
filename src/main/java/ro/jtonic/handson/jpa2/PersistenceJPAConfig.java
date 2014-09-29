@@ -1,6 +1,5 @@
 package ro.jtonic.handson.jpa2;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -21,11 +20,9 @@ import java.util.Properties;
 @PropertySource("classpath:persistence.properties")
 public class PersistenceJPAConfig {
 
-    @Value("${jdbc.driver}")
-    private String jdbcDriver;
+    private final String jdbcDriver = System.getenv("ORACLE_JDBC_DRIVER");
 
-    @Value("${jdbc.url}")
-    private String jdbcUrl;
+    private final String jdbcUrl = System.getenv("ORACLE_JDBC_URL");
 
     private final String jdbcUsername = System.getenv("MW_USERNAME");
 
