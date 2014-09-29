@@ -50,6 +50,14 @@ public class JpaPersister {
         }
     }
 
+    @Transactional
+    public void saveFileContent1(FileContent fileContent) {
+        if (fileContent == null) {
+            throw new IllegalArgumentException("FileContent cannot be null");
+        }
+        em.persist(fileContent);
+    }
+
     @Transactional(readOnly = true)
     public FileContent getById(Long id) throws SQLException {
         final FileContent saved = em.find(FileContent.class, id);
