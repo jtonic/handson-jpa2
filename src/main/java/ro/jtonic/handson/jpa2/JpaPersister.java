@@ -8,10 +8,7 @@ import ro.jtonic.handson.jpa2.entities.Part;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 
 /**
@@ -28,15 +25,7 @@ public class JpaPersister {
     }
 
     @Transactional
-    public void saveFileContent(FileContent fileContent) throws IOException {
-        long size = Files.size(Paths.get("E:/tmp/handson-jpa2/src/test/resources/image.png"));
-        final FileInputStream is = new FileInputStream("E:/tmp/handson-jpa2/src/test/resources/image.png");
-        fileContent.setContentFromInputStream(is, size);
-        em.persist(fileContent);
-    }
-
-    @Transactional
-    public long saveFileContent1(FileContent fileContent) {
+    public long saveFileContent(FileContent fileContent) {
         if (fileContent == null) {
             throw new IllegalArgumentException("FileContent cannot be null");
         }
