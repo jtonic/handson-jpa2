@@ -1,10 +1,10 @@
 package ro.jtonic.handson.jpa2.entities;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * Created by pazaran on 16/07/2014.
@@ -23,6 +23,15 @@ public class OrgEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TOR_ID", nullable = true)
     private OrgEntityType orgEntityType;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ORG_ID_PARENT", nullable = true)
+    private Collection<OrgEntity> childOrgEntities;
+
+    @ManyToOne
+    @JoinColumn(name = "ORG_ID_PARENT", nullable = true)
+//    @JoinTable(name = "TONY_ORG_ENTITY", joinColumns = { @JoinColumn(name = "ORG_ID_PARENT") }, inverseJoinColumns = { @JoinColumn(name = "ORG_ID") })
+    private OrgEntity parent;
 
     public OrgEntity() {
     }
@@ -45,6 +54,22 @@ public class OrgEntity implements Serializable {
 
     public void setOrgEntityType(OrgEntityType orgEntityType) {
         this.orgEntityType = orgEntityType;
+    }
+
+    public Collection<OrgEntity> getChildOrgEntities() {
+        return childOrgEntities;
+    }
+
+    public void setChildOrgEntities(Collection<OrgEntity> parent) {
+        this.childOrgEntities = parent;
+    }
+
+    public OrgEntity getParent() {
+        return parent;
+    }
+
+    public void setParent(OrgEntity parent) {
+        this.parent = parent;
     }
 
     @Override
