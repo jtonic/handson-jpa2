@@ -31,6 +31,9 @@ public class BlobExampleTest extends AbstractTestNGSpringContextTests {
         final long fileContentId = persister.saveFileContent(fileContent);
         final FileContent savedFileContent = persister.getById(fileContentId);
         System.out.println("savedFileContent = " + savedFileContent);
+        persister.mergeFileContent(fileContent);
+        savedFileContent.setContentFromInputStream(is, size);
+        persister.mergeFileContent(fileContent);
 /*
         //FIXME: this test in a transaction and uncomment the below code.
         //Uncomment the below and you will see the blob cannot be retrieved because the call is outside of a transaction
@@ -41,6 +44,12 @@ public class BlobExampleTest extends AbstractTestNGSpringContextTests {
         System.out.println("content = " + content);
 */
         Assert.assertNotNull(savedFileContent);
+    }
+
+    @Test
+    public void testSaveAndGetFileContent2() throws Exception {
+        persister.saveAndMergeFileContent();
+        Assert.assertTrue(true);
     }
 
 }

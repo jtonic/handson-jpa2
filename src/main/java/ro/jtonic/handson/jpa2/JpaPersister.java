@@ -10,7 +10,11 @@ import ro.jtonic.handson.jpa2.entities.Part;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 
 /**
@@ -71,4 +75,34 @@ public class JpaPersister {
         return orgEntity;
     }
 
+    @Transactional
+    public void mergeFileContent(FileContent fileContent) {
+        if (fileContent == null) {
+            throw new IllegalArgumentException("FileContent cannot be null");
+        }
+        em.merge(fileContent);
+    }
+
+    public void flush() {
+        em.flush();
+    }
+
+    public void refresh(FileContent fileContent) {
+        em.refresh(fileContent);
+    }
+
+    @Transactional
+    public void saveAndMergeFileContent() throws IOException {
+        final Path filePath = Paths.get(System.getProperty("user.dir"), "src/test/resources/image.png");
+        long size = Files.size(filePath);
+        FileContent fileContent = new FileContent("Antonel Pazargic");
+        final String absoluteFileName = filePath.toAbsolutePath().toString();
+        final FileInputStream is = new FileInputStream(absoluteFileName);
+        fileContent.setContentFromInputStream(is, size);
+        em.persist(fileContent);
+        em.flush();
+        em.refresh(fileContent);
+//        fileContent.setContentFromInputStream(is, size);
+        em.merge(fileContent);
+    }
 }
