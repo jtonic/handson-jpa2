@@ -30,8 +30,19 @@
             <AppenderRef ref="STDOUT" level="DEBUG"/>
         </Logger>
 
-        <Root level="WARN">
+        <logger name="org.hibernate.SQL" additivity="false">
+            <level value="DEBUG"/>
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <logger name="org.hibernate.type" additivity="false">
+            <level value="TRACE"/>
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <Root level="TRACE">
             <AppenderRef ref="STDOUT"/>
         </Root>
+
     </Loggers>
 </Configuration>

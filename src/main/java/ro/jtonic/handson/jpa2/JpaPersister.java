@@ -10,11 +10,8 @@ import ro.jtonic.handson.jpa2.entities.Part;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.sql.SQLException;
 
 /**
@@ -92,17 +89,14 @@ public class JpaPersister {
     }
 
     @Transactional
-    public void saveAndMergeFileContent() throws IOException {
-        final Path filePath = Paths.get(System.getProperty("user.dir"), "src/test/resources/image.png");
-        long size = Files.size(filePath);
+    public void saveAndMergeFileContent(InputStream is1, long size1, InputStream is2, long size2) throws IOException {
         FileContent fileContent = new FileContent("Antonel Pazargic");
-        final String absoluteFileName = filePath.toAbsolutePath().toString();
-        final FileInputStream is = new FileInputStream(absoluteFileName);
-        fileContent.setContentFromInputStream(is, size);
+        fileContent.setContentFromInputStream(is1, size1);
         em.persist(fileContent);
         em.flush();
         em.refresh(fileContent);
-//        fileContent.setContentFromInputStream(is, size);
-        em.merge(fileContent);
+
+        fileContent.setContentFromInputStream(is2, size2);
+//        em.merge(fileContent);
     }
 }

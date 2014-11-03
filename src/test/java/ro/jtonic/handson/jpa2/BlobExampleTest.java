@@ -8,7 +8,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import ro.jtonic.handson.jpa2.entities.FileContent;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,25 +32,42 @@ public class BlobExampleTest extends AbstractTestNGSpringContextTests {
         fileContent.setContentFromInputStream(is, size);
         final long fileContentId = persister.saveFileContent(fileContent);
         final FileContent savedFileContent = persister.getById(fileContentId);
-        System.out.println("savedFileContent = " + savedFileContent);
-        persister.mergeFileContent(fileContent);
-        savedFileContent.setContentFromInputStream(is, size);
-        persister.mergeFileContent(fileContent);
-/*
-        //FIXME: this test in a transaction and uncomment the below code.
-        //Uncomment the below and you will see the blob cannot be retrieved because the call is outside of a transaction
-        final InputStream content = savedFileContent.getContentFromInputStream();
-        final long retrievedBytesLength = ByteStreams.toByteArray(content).length;
-        Assert.assertNotNull(savedFileContent);
-        Assert.assertEquals(retrievedBytesLength, size);
-        System.out.println("content = " + content);
-*/
         Assert.assertNotNull(savedFileContent);
     }
 
     @Test
-    public void testSaveAndGetFileContent2() throws Exception {
-        persister.saveAndMergeFileContent();
+    public void testPersistAndMergeMediumFileContent() throws Exception {
+        final String fileName1 = "src/test/resources/image.png";
+        final Path filePath1 = Paths.get(System.getProperty("user.dir"), fileName1);
+        long size1 = Files.size(filePath1);
+        System.out.println("fileName1 = " + fileName1);
+        System.out.println("size1 = " + size1);
+        final String absoluteFileName1 = filePath1.toAbsolutePath().toString();
+        final InputStream is1 = new FileInputStream(absoluteFileName1);
+
+        final String fileName2 = "src/test/resources/DEBUG.mp4";
+        final Path filePath2 = Paths.get(System.getProperty("user.dir"), fileName2);
+        long size2 = Files.size(filePath2);
+        System.out.println("fileName2 = " + fileName2);
+        System.out.println("size2 = " + size2);
+        final String absoluteFileName2 = filePath2.toAbsolutePath().toString();
+        final InputStream is2 = new FileInputStream(absoluteFileName2);
+
+        persister.saveAndMergeFileContent(is1, size1, is2, size2);
+        Assert.assertTrue(true);
+    }
+
+    @Test
+    public void testPersistAndMergeSmallFileContent() throws Exception {
+        final byte[] bytes1 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa".getBytes();
+        long size1 = bytes1.length;
+        final InputStream is1 = new ByteArrayInputStream(bytes1);
+
+        final byte[] bytes2 = "fffffffffffffffffffffffffffffffffffffffffffffffffff".getBytes();
+        long size2 = bytes2.length;
+        final InputStream is2 = new ByteArrayInputStream(bytes2);
+
+        persister.saveAndMergeFileContent(is1, size1, is2, size2);
         Assert.assertTrue(true);
     }
 
