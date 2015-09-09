@@ -10,9 +10,11 @@ import ro.jtonic.handson.jpa2.entities.Part;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by pazaran on 08/08/2014.
@@ -98,5 +100,11 @@ public class JpaPersister {
 
         fileContent.setContentFromInputStream(is2, size2);
 //        em.merge(fileContent);
+    }
+
+    public List<OrgEntityType> getOrgEntTypeByNativeSql(String name) {
+        final TypedQuery<OrgEntityType> query = em.createNamedQuery(OrgEntityType.nativeQuery, OrgEntityType.class).setParameter("name", name);
+        final List<OrgEntityType> orgEntityTypes = query.getResultList();
+        return orgEntityTypes;
     }
 }

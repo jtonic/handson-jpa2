@@ -1,11 +1,12 @@
 package ro.jtonic.handson.jpa2.entities;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -14,7 +15,12 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "TONY_ORG_ENTITY_TYPE")
+@NamedNativeQueries(
+        {@NamedNativeQuery(name = OrgEntityType.nativeQuery, query = "SELECT TOR_ID, NAME FROM TONY_ORG_ENTITY_TYPE WHERE NAME = :name", resultClass = OrgEntityType.class)}
+)
 public class OrgEntityType implements Serializable {
+
+    public static final String nativeQuery = "nativeQuery";
 
     @Id
     @Column(name = "TOR_ID")
